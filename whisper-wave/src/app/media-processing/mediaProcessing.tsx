@@ -1,12 +1,10 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { useReactMediaRecorder } from 'react-media-recorder';
 import axios from 'axios';
 import "../styles.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophone, faUpload } from '@fortawesome/free-solid-svg-icons';
-
 const MediaProcessing = () => {
     const [mode, setMode] = useState<'record' | 'upload' | null>(null);
     const [file, setFile] = useState<File | null>(null);
@@ -14,10 +12,7 @@ const MediaProcessing = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [showBounce, setShowBounce] = useState<boolean>(false);
-
     const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({ audio: true });
-
-
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             setFile(event.target.files[0]);
@@ -25,13 +20,11 @@ const MediaProcessing = () => {
             setShowBounce(true); 
         }
     };
-
     const handleSubmit = async () => {
         setIsLoading(true);
         setError(null);
         setPredictions(null);
         setShowBounce(false); 
-
         const formData = new FormData();
         if (mode === 'record' && mediaBlobUrl) {
             const audioBlob = await fetch(mediaBlobUrl).then(r => r.blob());
@@ -43,7 +36,6 @@ const MediaProcessing = () => {
             setIsLoading(false);
             return;
         }
-
         try {
             const response = await axios.post<{ predictions: Array<{ class: string; score: number }> }>('http://localhost:8000/predict', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
@@ -55,13 +47,11 @@ const MediaProcessing = () => {
             setIsLoading(false);
         }
     };
-
     useEffect(() => {
         if (status === 'stopped' && mode === 'record') {
             setShowBounce(true);
         }
     }, [status, mode]);
-
     return (
         <div className='w-full flex flex-col items-center justify-center p-4 bg-white min-h-screen font-[Outfit]'>
             <h1 className='text-4xl font-bold mb-4 text-center text-black'>Audio Classification</h1>
@@ -75,7 +65,6 @@ const MediaProcessing = () => {
                     <FontAwesomeIcon icon={faMicrophone} className="mr-2" />
                     {status === 'recording' ? 'Stop Recording' : 'Record Audio'}
                 </button>
-
                 <button className="px-6 py-3 rounded-md bg-black text-white font-semibold hover:bg-gray-800 transition-colors duration-300">
                     <label htmlFor="audioUpload" className="cursor-pointer">
                         <FontAwesomeIcon icon={faUpload} className="mr-2" />
@@ -90,7 +79,6 @@ const MediaProcessing = () => {
                     className="hidden"
                 />
             </div>
-
             <div className="mt-8">
                 <button
                     className={`px-6 py-3 w-full max-w-xs bg-black text-white rounded-md font-semibold hover:bg-gray-800 transition-colors duration-300 ${showBounce ? 'animate-bounce' : ''}`}
@@ -100,11 +88,8 @@ const MediaProcessing = () => {
                     {isLoading ? 'Processing...' : 'Submit'}
                 </button>
             </div>
-
             {isLoading && <div className="mt-4 w-full h-1 bg-black animate-pulse"></div>}
-
             {error && <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">{error}</div>}
-
             {predictions && (
                 <div className="mt-8 w-full max-w-3xl mx-auto">
                     <h2 className="text-2xl font-bold mb-4 text-black">Predictions</h2>
@@ -123,5 +108,4 @@ const MediaProcessing = () => {
         </div>
     );
 };
-
 export default MediaProcessing;
