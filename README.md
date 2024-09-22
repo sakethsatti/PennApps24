@@ -2,6 +2,17 @@
 by: Saketh Satti (saksatti@gmail.com), Pranshu Suyal(suyalpranshu@gmail.com), and Akshat Tewari (akkubear@gmail.com)
 This app was hack for PennApps XXV
 
+Languages: Python, JavaScript
+Libraries: React, FastAPI, TensorFlow, OpenAI (Whisper and GPT), PyMongo
+Frameworks: NextJS
+Database: MongoDB
+
+Resources:
+Librosa Docs: https://librosa.org/doc/latest/index.html
+MongoDB Docs: https://www.mongodb.com/docs/atlas/
+OpenAI Docs: https://platform.openai.com/docs/overview
+
+
 ## Inspiration
 At the beginning of the weekend, we tossed around ideas about different apps. We got bored at some point and started discussing family. A lot of our family members seemed to have some sort of hearing loss. At this point, we started to formulate ideas around this topic. We realized that a lot of apps existed to assist individuals with hearing loss. What if we could combine a bunch of different applications into one? 
 
