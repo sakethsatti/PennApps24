@@ -75,7 +75,7 @@ export default function Home() {
           <Button
             className="flex justify-center items-center m-2  text-3xl hover:underline font-bold"
             variant="dark"
-            href="/speech-analyzer"
+            href="/notetaking"
           >
             <h1 className="mr-2 text-white">Speech Analyzer</h1>
             <FontAwesomeIcon
