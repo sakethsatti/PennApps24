@@ -1,66 +1,67 @@
+import { useState } from "react";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
 
-const signInForm = (displayStatus: string) => {
-  const [userName, setUserNameState] = useState("");
-  const [passwordName, setPasswordState] = useState("");
+const SignInForm = () => {
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/signInUser`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: userName,
+          password: password,
+        }),
+      });
+      const data = await response.json();
+      if (data.message === "user successfully signed in") {
+        localStorage.setItem("username", userName);
+        location.reload();
+      } else {
+        alert("Sign in failed. Please check your credentials.");
+      }
+    } catch (error) {
+      console.error("Error during sign in:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
+
   return (
-    <>
-      <div
-        className={`${displayStatus} w-50 ml-auto mr-auto p-8 border-1 border-gray-300 shadow-sm mt-4 rounded-lg`}
-      >
-        <Form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const response = await fetch(`http://127.0.0.1:8000/signInUser`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json", // Add this line
-              },
-              body: JSON.stringify({
-                username: `${userName}`,
-                password: `${passwordName}`,
-              }),
-            }).then((response) => response.json());
-            if ((response.message = "user successfully signed in")) {
-              localStorage.setItem("username", `${userName}`);
-              console.log("line 27, user successfully signed in");
-              location.reload();
-            }
-          }}
-        >
-          <FloatingLabel
-            controlId="floatingInput"
-            label="UserName"
-            className="mb-3"
-          >
-            <Form.Control
-              type="text"
-              placeholder="name@example.com"
-              onChange={(e) => {
-                setUserNameState(e.target.value);
-              }}
-            />
-          </FloatingLabel>
-          <FloatingLabel controlId="floatingPassword" label="Password">
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              onChange={async (e) => {
-                setPasswordState(e.target.value);
-              }}
-            />
-          </FloatingLabel>
-          <Button variant="dark" type="submit" className="mt-2">
-            Submit
+    <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg">
+      <h2 className="text-3xl font-bold text-center mb-6">Sign In</h2>
+      <Form onSubmit={handleSubmit}>
+        <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
+          <Form.Control
+            type="text"
+            placeholder="Username"
+            onChange={(e) => setUserName(e.target.value)}
+            required
+          />
+        </FloatingLabel>
+        <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </FloatingLabel>
+        <div className="text-center">
+          <Button variant="primary" type="submit" className="w-full">
+            Sign In
           </Button>
-        </Form>
-      </div>
-    </>
+        </div>
+      </Form>
+    </div>
   );
 };
 
-export default signInForm;
+export default SignInForm;

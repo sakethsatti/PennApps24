@@ -1,88 +1,80 @@
+import { useState } from "react";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
-import "./../styles.css";
 
-const signInForm = (displayStatus: string) => {
-  const [userName, setUserNameState] = useState("");
-  const [passwordName, setPasswordState] = useState("");
-  const [confirmPasswordName, setConfirmPasswordState] = useState("");
+const RegisterForm = () => {
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/registerUser`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: userName,
+          password: password,
+        }),
+      });
+      const data = await response.json();
+      if (data.message === "user successfully registered") {
+        localStorage.setItem("username", userName);
+        location.reload();
+      } else {
+        alert("Registration failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
+
   return (
-    <>
-      <div
-        className={`${displayStatus} w-50 ml-auto mr-auto p-8 border-1 border-gray-300 shadow-sm mt-4 rounded-lg`}
-      >
-        <Form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            if (confirmPasswordName === passwordName) {
-              const response = await fetch(
-                `http://127.0.0.1:8000/registerUser`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json", // Add this line
-                  },
-                  body: JSON.stringify({
-                    username: `${userName}`,
-                    password: `${passwordName}`,
-                  }),
-                }
-              ).then((response) => response.json());
-              if ((response.message = "user successfully signed in")) {
-                localStorage.setItem("username", `${userName}`);
-                console.log("line 27, user successfully signed in");
-                location.reload();
-              }
-            } else {
-              alert("Password confirmation and password do not match");
-            }
-          }}
-        >
-          <FloatingLabel
-            controlId="floatingInput"
-            label="UserName"
-            className="mb-3"
-          >
-            <Form.Control
-              type="text"
-              placeholder="name@example.com"
-              onChange={(e) => {
-                setUserNameState(e.target.value);
-              }}
-            />
-          </FloatingLabel>
-          <FloatingLabel controlId="floatingPassword" label="Password">
-            <Form.Control
-              type="password"
-              placeholder="Password"
-              onChange={async (e) => {
-                setPasswordState(e.target.value);
-              }}
-            />
-          </FloatingLabel>
-          <FloatingLabel
-            className="mt-2"
-            controlId="floatingPassword"
-            label="Confirm Password"
-          >
-            <Form.Control
-              type="password"
-              placeholder="Confirm Password"
-              onChange={async (e) => {
-                setConfirmPasswordState(e.target.value);
-              }}
-            />
-          </FloatingLabel>
-          <Button variant="dark" type="submit" className="mt-2">
-            Submit
+    <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg">
+      <h2 className="text-3xl font-bold text-center mb-6">Sign Up</h2>
+      <Form onSubmit={handleSubmit}>
+        <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
+          <Form.Control
+            type="text"
+            placeholder="Username"
+            onChange={(e) => setUserName(e.target.value)}
+            required
+          />
+        </FloatingLabel>
+        <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </FloatingLabel>
+        <FloatingLabel controlId="floatingConfirmPassword" label="Confirm Password" className="mb-3">
+          <Form.Control
+            type="password"
+            placeholder="Confirm Password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </FloatingLabel>
+        <div className="text-center">
+          <Button variant="primary" type="submit" className="w-full">
+            Sign Up
           </Button>
-        </Form>
-      </div>
-    </>
+        </div>
+      </Form>
+    </div>
   );
 };
 
-export default signInForm;
+export default RegisterForm;
