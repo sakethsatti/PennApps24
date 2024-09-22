@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import OpenAI from "openai";
 import "../styles.css";
-
-const getRecentSound = () => "cat";
+import queryDataBase from "../functions/queryUserOutputs";
 
 type StoryType = "funny" | "sad" | "serious";
 
@@ -26,9 +25,22 @@ const StoryCreation: React.FC = () => {
     setError(null);
     setStory(null);
     setStoryType(type);
-
-    const recentSound = getRecentSound();
-
+    let role = "";
+    let recentSound: any = await queryDataBase(
+      localStorage.getItem("username")
+    );
+    recentSound = new Set(recentSound);
+    recentSound = Array.from(recentSound);
+    console.log("array");
+    if (typeof recentSound != "string") {
+      let roles = "";
+      recentSound.forEach((element: any) => {
+        roles += element + " and ";
+        console.log("logging element");
+        console.log(element);
+      });
+      role = `Tell me a ${type} story about a ${roles} using ${roles} sounds.`;
+    }
     try {
       const response = await openai.chat.completions.create({
         model: "gpt-4o-mini",
@@ -48,6 +60,17 @@ const StoryCreation: React.FC = () => {
       const generatedStory =
         response.choices[0]?.message?.content || "No story available.";
       setStory(generatedStory);
+      const storeAStory = await fetch("http://127.0.0.1:8000/storeStories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // <-- Include the Content-Type header
+        },
+        body: JSON.stringify({
+          story: generatedStory,
+          username: localStorage.getItem("username"),
+          tone: type,
+        }),
+      }).then((response) => response.json());
     } catch (err) {
       setError(
         "Error generating story: " +

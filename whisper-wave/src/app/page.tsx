@@ -1,27 +1,40 @@
 "use client";
 import { useState, useEffect } from "react";
-import Button from "react-bootstrap/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
-import SignInForm from "./components/signInForm";
-import RegisterForm from "./components/registerForm";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles.css";
 import NavbarHomeScreen from "./components/navbar";
+import SignInForm from "./components/signInForm";
+import RegisterForm from "./components/registerForm";
+import UserNotes from "./components/UserNotes";
+import queryDataBaseForNotes from "./functions/queryUserNotes";
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn]: any = useState("none");
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [showSignIn, setShowSignIn] = useState(true);
+  const [userNotes, setUserNotes] = useState<any[]>([]);
 
   useEffect(() => {
     const username = localStorage.getItem("username");
     setIsLoggedIn(username != null);
+
+    if (username) {
+      fetchUserNotes(username);
+    }
   }, []);
+
+  const fetchUserNotes = async (username: string) => {
+    try {
+      const notes = await queryDataBaseForNotes(username);
+      setUserNotes(Array.isArray(notes) ? notes : [notes]);
+    } catch (error) {
+      console.error("Error fetching user notes:", error);
+    }
+  };
 
   const handleSignOut = () => {
     localStorage.clear();
-    location.reload();
     setIsLoggedIn(false);
+    setUserNotes([]);
   };
 
   const toggleForm = () => {
@@ -30,20 +43,20 @@ export default function Home() {
 
   return (
     <>
-      {isLoggedIn === true ? (
-        <>{NavbarHomeScreen(["text-normal", "text-normal", "text-normal"])}</>
-      ) : (
-        <></>
-      )}
+      {isLoggedIn &&
+        NavbarHomeScreen(["text-normal", "text-normal", "text-normal"])}
       <div className="flex flex-col min-h-screen bg-white">
         <main className="flex-grow flex flex-col items-center justify-center p-4">
           <h1 className="text-6xl font-bold text-center mb-2">WhisperWave™</h1>
-          <h2 className="text-4xl text-center mb-8">A Toolkit for the Deaf.</h2>
+          <h2 className="text-4xl text-center mb-16">
+            A Toolkit for the Deaf.
+          </h2>
 
           {isLoggedIn === true ? (
-            <div className="w-full max-w-md">
-              <h3 className="text-3xl text-center mb-4">Our Features:</h3>
-            </div>
+            <>
+              <h1>Your Notes</h1>
+              <UserNotes notes={userNotes} />
+            </>
           ) : isLoggedIn === false ? (
             <div className="w-full max-w-md">
               {showSignIn ? <SignInForm /> : <RegisterForm />}
@@ -59,9 +72,7 @@ export default function Home() {
                 </button>
               </p>
             </div>
-          ) : (
-            <></>
-          )}
+          ) : null}
         </main>
       </div>
     </>

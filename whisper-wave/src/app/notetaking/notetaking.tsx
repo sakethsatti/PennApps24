@@ -74,6 +74,16 @@ const NoteTaking = () => {
 
       const generatedNotes = summaryResponse.choices[0].message.content;
       setNotes(generatedNotes);
+      const addToNotesDB = await fetch("http://127.0.0.1:8000/storeNotes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // <-- Include the Content-Type header
+        },
+        body: JSON.stringify({
+          notesDocument: generatedNotes,
+          username: localStorage.getItem("username"),
+        }),
+      }).then((response) => response.json());
     } catch (err) {
       setError(
         "Error processing audio: " +

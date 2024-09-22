@@ -118,6 +118,48 @@ async def storeSoundsFromUsers(soundReq: soundRequst):
     pass
 
 
+class storyRequest(BaseModel):
+    story: str
+    username: str
+    tone: str
+
+
+@app.post("/storeStories")
+async def storeSoundsFromUsers(storyReq: storyRequest):
+    print("nothing")
+    collection = db["userStories"]
+    collection.insert_one(
+        {"story": storyReq.story, "username": storyReq.username, "tone": storyReq.tone}
+    )
+    return {"message": "success"}
+
+
+class addToNotes(BaseModel):
+    notesDocument: object
+    username: str
+
+
+@app.post("/storeNotes")
+async def storeNotesFromUsers(noteReq: addToNotes):
+    try:
+        noteString = ""
+        for x in noteReq.notesDocument.splitlines()[1:]:
+            if len(x) > 4:
+                noteString += "\n" + x
+        collection = db["userNotes"]
+        collection.insert_one(
+            {
+                "notesDocument": noteString,
+                "username": noteReq.username,
+                "title": noteReq.notesDocument.splitlines()[0],
+            }
+        )
+        return {"message": "Notes added successfully"}
+    except Exception as e:
+        print(e)
+        return {"message": "Was not successful"}
+
+
 class queryRequest(BaseModel):
     username: str
 
@@ -131,11 +173,47 @@ async def querySounds(queryReq: queryRequest):
         print(doc["username"] == queryReq)
         if doc["username"] == queryReq.username:
             print("here")
+            print(type(doc["sound"]))
             retArry.append(doc["sound"])
 
     if len(retArry) == 0:
         return {"message": "no results found"}
+    return {"message": retArry}
 
+
+@app.post("/queryNotes")
+async def queryNotes(queryReq: queryRequest):
+    collection = db["userNotes"]
+    retArry = []
+    print(queryReq.username)
+    for doc in collection.find():
+        print(doc["username"] == queryReq)
+        if doc["username"] == queryReq.username:
+            print("here")
+            print(type(doc["username"]))
+            print(doc)
+            retArry.append({"note": doc["notesDocument"], "title": doc["title"][7:]})
+
+    if len(retArry) == 0:
+        return {"message": "no results found"}
+    return {"message": retArry}
+
+
+@app.post("/queryStories")
+async def queryStories(queryReq: queryRequest):
+    collection = db["userStories"]
+    retArry = []
+    print(queryReq.username)
+    for doc in collection.find():
+        print(doc["username"] == queryReq)
+        if doc["username"] == queryReq.username:
+            print("here")
+            print(type(doc["username"]))
+            print(doc)
+            retArry.append({"story": doc["story"], "tone": doc["tone"]})
+
+    if len(retArry) == 0:
+        return {"message": "no results found"}
     return {"message": retArry}
 
 
