@@ -1,5 +1,5 @@
 # PennApps24
-Saketh Satti and Akshat Tewari submission for PennApps XXV
+Saketh Satti, Akshat Tewari, and Pranshu Suyal's submission for PennApps XXV.
 
 
 @misc{tensorflowmodelgarden2020,
