@@ -59,8 +59,8 @@ async def signInUser(loginInfo: SignInRequest):
     try:
         for user in collection.find():
             print("iteration")
-            print(f"Password Doc: {user["username"]}")
-            print(f"{user["password"]}")
+            print(f"Password Doc: {user['username']}")
+            print(f"{user['password']}")
             if (
                 user["username"] == loginInfo.username
                 and user["password"] == loginInfo.password
@@ -74,6 +74,7 @@ async def signInUser(loginInfo: SignInRequest):
     except Exception as e:
         print(e)
         print("line 72")
+    print("couldn't find anyone")
     return {"message": "couldn't find user"}
 
 
@@ -106,30 +107,37 @@ class soundRequst(BaseModel):
     username: str
     date: str
 
+
 @app.post("/storeSounds")
 async def storeSoundsFromUsers(soundReq: soundRequst):
     print("nothing")
     collection = db["userOutputs"]
-    collection.insert_one({"sound": soundReq.sound, "username": soundReq.username, "date": soundReq.date})
+    collection.insert_one(
+        {"sound": soundReq.sound, "username": soundReq.username, "date": soundReq.date}
+    )
     pass
+
 
 class queryRequest(BaseModel):
     username: str
+
+
 @app.post("/querySounds")
 async def querySounds(queryReq: queryRequest):
     collection = db["userOutputs"]
     retArry = []
     print(queryReq.username)
-    for doc in collection.find(): 
+    for doc in collection.find():
         print(doc["username"] == queryReq)
         if doc["username"] == queryReq.username:
             print("here")
             retArry.append(doc["sound"])
-    
+
     if len(retArry) == 0:
         return {"message": "no results found"}
-    
+
     return {"message": retArry}
+
 
 @app.get("/test")
 async def testApi():

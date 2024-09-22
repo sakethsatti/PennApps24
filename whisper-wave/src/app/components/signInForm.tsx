@@ -38,7 +38,11 @@ const SignInForm = () => {
     <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg">
       <h2 className="text-3xl font-bold text-center mb-6">Sign In</h2>
       <Form onSubmit={handleSubmit}>
-        <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
+        <FloatingLabel
+          controlId="floatingInput"
+          label="Username"
+          className="mb-3"
+        >
           <Form.Control
             type="text"
             placeholder="Username"
@@ -46,7 +50,11 @@ const SignInForm = () => {
             required
           />
         </FloatingLabel>
-        <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
+        <FloatingLabel
+          controlId="floatingPassword"
+          label="Password"
+          className="mb-3"
+        >
           <Form.Control
             type="password"
             placeholder="Password"
