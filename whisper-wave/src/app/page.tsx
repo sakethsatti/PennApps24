@@ -54,6 +54,7 @@ export default function Home() {
   const toggleForm = () => {
     setShowSignIn(!showSignIn);
   };
+  console.log(userNotes);
 
   return (
     <>

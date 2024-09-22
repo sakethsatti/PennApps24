@@ -1,5 +1,5 @@
-const clearUserSoundCache = async (username) => {
-  const response = await fetch("http://localhost:8000/clearSoundCache", {
+const clearUserNoteCache = async (username) => {
+  const response = await fetch("http://localhost:8000/clearNoteCache", {
     method: "POST",
     headers: {
       "Content-Type": "application/json", // <-- Include the Content-Type header
@@ -18,4 +18,4 @@ const clearUserSoundCache = async (username) => {
   return response.message;
 };
 
-export default clearUserSoundCache;
+export default clearUserNoteCache;

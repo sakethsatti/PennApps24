@@ -142,10 +142,13 @@ class addToNotes(BaseModel):
 @app.post("/storeNotes")
 async def storeNotesFromUsers(noteReq: addToNotes):
     try:
-        noteString = ""
-        for x in noteReq.notesDocument.splitlines()[1:]:
+        noteString = "\n"
+        print(noteReq.notesDocument.splitlines())
+        print("line 147")
+        for x in noteReq.notesDocument.splitlines()[2:]:
             noteString += "\n" + x
         collection = db["userNotes"]
+        print(noteString)
         collection.insert_one(
             {
                 "notesDocument": noteString,
@@ -219,6 +222,13 @@ async def queryStories(queryReq: queryRequest):
 @app.post("/clearSoundCache")
 async def clearSoundCache(queryReq: queryRequest):
     collection = db["userOutputs"]
+    collection.delete_many({"username": queryReq.username})
+    return {"message": "Thing Delete Successfully"}
+
+
+@app.post("/clearNoteCache")
+async def clearSoundCache(queryReq: queryRequest):
+    collection = db["userNotes"]
     collection.delete_many({"username": queryReq.username})
     return {"message": "Thing Delete Successfully"}
 

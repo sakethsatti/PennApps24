@@ -1,6 +1,7 @@
 import { Container } from "postcss";
 import { Button, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import clearUserSoundCache from "../functions/clearSoundCache";
+import clearUserNoteCache from "../functions/clearNotesCache";
 export default function NavbarHomeScreen(
   boldquery: [style: string, style: string, style: string, ...rest: any]
 ) {
@@ -36,6 +37,15 @@ export default function NavbarHomeScreen(
             </NavDropdown> */}
           </Nav>
           <Nav>
+            <Button
+              variant="danger"
+              className=" md:ml-auto md:mr-auto md:w-[75%] tablet:w-[200%] tablet:mr-2"
+              onClick={async () => {
+                await clearUserNoteCache(localStorage.getItem("username"));
+              }}
+            >
+              Clear Note Cache
+            </Button>
             <Button
               variant="danger"
               className=" md:ml-auto md:mr-auto md:w-[75%] tablet:w-[200%] tablet:mr-2"
