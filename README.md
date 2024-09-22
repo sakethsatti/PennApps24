@@ -1,12 +1,11 @@
 # WhisperWave
-by: Saketh Satti (saksatti@gmail.com), Pranshu Suyal(suyalpranshu@gmail.com), and Akshat Tewari (akkubear@gmail.com)
+by: Saketh Satti (saksatti@gmail.com), Pranshu Suyal (suyalpranshu@gmail.com), and Akshat Tewari (akkubear@gmail.com)
 
-This app was hack for PennApps XXV
-
+This web  app was a hack for PennApps XXV
 
 Languages: Python, JavaScript
 
-Libraries: React, FastAPI, TensorFlow, OpenAI (Whisper and GPT), PyMongo
+Libraries: React, React-Bootstrap, FastAPI, TensorFlow, OpenAI (Whisper and GPT), PyMongo
 
 Frameworks: NextJS
 
@@ -15,7 +14,7 @@ Database: MongoDB
 
 Resources:
 
-Librosa Docs: https://librosa.org/doc/latest/index.html
+YAMNet Example: https://www.tensorflow.org/hub/tutorials/yamnet
 
 MongoDB Docs: https://www.mongodb.com/docs/atlas/
 
