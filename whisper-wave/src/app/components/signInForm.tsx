@@ -25,10 +25,12 @@ const signInForm = (displayStatus: string) => {
                 password: `${passwordName}`,
               }),
             }).then((response) => response.json());
-            if ((response.message = "user successfully signed in")) {
+            if (response.message == "user successfully signed in") {
               localStorage.setItem("username", `${userName}`);
               console.log("line 27, user successfully signed in");
               location.reload();
+            } else if ((response.message = "couldn't find anyone")) {
+              alert("Invalid username or password");
             }
           }}
         >

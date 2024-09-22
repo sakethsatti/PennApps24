@@ -61,10 +61,7 @@ async def signInUser(loginInfo: SignInRequest):
             print("iteration")
             print(f"Password Doc: {user["username"]}")
             print(f"{user["password"]}")
-            if (
-                user["username"] == loginInfo.username
-                and user["password"] == loginInfo.password
-            ):
+            if user["username"] == loginInfo.username and user["password"] == loginInfo.password:
                 print("done")
                 return {"message": "user successfully signed in"}
     except AttributeError as e:
@@ -74,6 +71,7 @@ async def signInUser(loginInfo: SignInRequest):
     except Exception as e:
         print(e)
         print("line 72")
+    print("couldn't find anyone")
     return {"message": "couldn't find user"}
 
 

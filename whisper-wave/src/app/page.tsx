@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 
 import { config } from "@fortawesome/fontawesome-svg-core";
+import NavbarHomeScreen from "./components/navbar";
 config.autoAddCss = false; /* eslint-disable import/first */
 
 export default function Home() {
@@ -46,58 +47,22 @@ export default function Home() {
   });
   const usePage = (
     <>
-      <div
-        className={
-          !isLoggedIn
-            ? "flex flex-col h-screen bg-white justify-center items-center"
-            : "hidden"
-        }
-      >
-        <h1 className="text-black mb-4 text-6xl text-center">WhisperWave™</h1>
-        <h2 className="text-black text-4xl text-center">
-          A Toolkit for the Deaf.
-        </h2>
-        <h3 className="text-black mt-16 mb-4 text-3xl text-center">
-          Take a look at our features:
-        </h3>
-        <div className="flex flex-col justify-center items-center bg-gray-200 rounded-lg p-6">
-          <Button
-            className="flex justify-center items-center m-2  text-3xl hover:underline font-bold"
-            variant="dark"
-            href="/media-processing"
-          >
-            <h1 className="mr-2 text-white">Media Processing</h1>
-            <FontAwesomeIcon
-              className="text-white"
-              icon={faUpRightFromSquare}
-            />
-          </Button>
-          <Button
-            className="flex justify-center items-center m-2  text-3xl hover:underline font-bold"
-            variant="dark"
-            href="/notetaking"
-          >
-            <h1 className="mr-2 text-white">Speech Analyzer</h1>
-            <FontAwesomeIcon
-              className="text-white"
-              icon={faUpRightFromSquare}
-            />
-          </Button>
-          <Button
-            className={
-              isLoggedIn === false
-                ? "flex justify-center items-center m-2 w-[300px] text-3xl hover:underline font-bold"
-                : "hidden"
-            }
-            variant="danger"
-            id="signOutButton"
-          >
-            <h1 className="mr-2 text-white">Sign Out</h1>
-            <FontAwesomeIcon
-              className="text-white"
-              icon={faUpRightFromSquare}
-            />
-          </Button>
+      <div className={!isLoggedIn ? "block" : "hidden"}>
+        {NavbarHomeScreen(["text-normal", "text-normal", "text-normal"])}
+        <div
+          className={
+            !isLoggedIn
+              ? "flex flex-col h-screen bg-white justify-center items-center"
+              : "hidden"
+          }
+        >
+          <h1 className="text-black mb-4 text-6xl text-center">WhisperWave™</h1>
+          <h2 className="text-black text-4xl text-center">
+            A Toolkit for the Deaf.
+          </h2>
+          <h3 className="text-black mt-16 mb-4 text-3xl text-center">
+            Take a look at our features:
+          </h3>
         </div>
       </div>
     </>
