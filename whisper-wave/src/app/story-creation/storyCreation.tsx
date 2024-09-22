@@ -12,6 +12,7 @@ const StoryCreation: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [storyType, setStoryType] = useState<StoryType | null>(null);
+  const [customInput, setCustomInput] = useState<string>(""); // New state for extra input
 
   console.log(process.env.NEXT_PUBLIC_OPENAI_API_KEY);
 
@@ -51,7 +52,7 @@ const StoryCreation: React.FC = () => {
           },
           {
             role: "user",
-            content: `Tell me a ${type} story about a ${recentSound} using ${recentSound} sounds.`,
+            content: `Tell me a ${type} story about a ${recentSound} using ${recentSound} sounds. Here is some extra information: ${customInput}`, // Include extra user input
           },
         ],
         max_tokens: 500,
@@ -105,6 +106,7 @@ const StoryCreation: React.FC = () => {
         Click a button below to hear a story about your most recent sound.
       </p>
 
+      {/* New textarea for extra user input */}
       <div className="mt-8 flex justify-center gap-4">
         <StoryButton type="funny" label="Funny!" />
         <StoryButton type="sad" label="Sad..." />

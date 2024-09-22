@@ -6,12 +6,15 @@ import NavbarHomeScreen from "./components/navbar";
 import SignInForm from "./components/signInForm";
 import RegisterForm from "./components/registerForm";
 import UserNotes from "./components/UserNotes";
+import UserStories from "./components/UserStories";
 import queryDataBaseForNotes from "./functions/queryUserNotes";
+import queryDataBaseForStories from "./functions/queryUserStories";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [showSignIn, setShowSignIn] = useState(true);
   const [userNotes, setUserNotes] = useState<any[]>([]);
+  const [userStories, setUserStories] = useState<any[]>([]);
 
   useEffect(() => {
     const username = localStorage.getItem("username");
@@ -19,6 +22,7 @@ export default function Home() {
 
     if (username) {
       fetchUserNotes(username);
+      fetchUserStories(username);
     }
   }, []);
 
@@ -28,6 +32,15 @@ export default function Home() {
       setUserNotes(Array.isArray(notes) ? notes : [notes]);
     } catch (error) {
       console.error("Error fetching user notes:", error);
+    }
+  };
+
+  const fetchUserStories = async (username: string) => {
+    try {
+      const stories = await queryDataBaseForStories(username);
+      setUserStories(Array.isArray(stories) ? stories : [stories]);
+    } catch (error) {
+      console.error("Error fetching user stories:", error);
     }
   };
 
@@ -54,8 +67,14 @@ export default function Home() {
 
           {isLoggedIn === true ? (
             <>
-              <h1>Your Notes</h1>
-              <UserNotes notes={userNotes} />
+              <>
+                <h1>Your Notes</h1>
+                <UserNotes notes={userNotes} />
+              </>
+              <>
+                <h1>Your Stories</h1>
+                <UserStories stories={userStories} />
+              </>
             </>
           ) : isLoggedIn === false ? (
             <div className="w-full max-w-md">
