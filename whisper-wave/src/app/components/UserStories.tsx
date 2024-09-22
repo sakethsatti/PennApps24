@@ -12,7 +12,7 @@ interface UserStoriesProps {
 
 const UserStories: React.FC<UserStoriesProps> = ({ stories }) => {
   if (JSON.stringify(stories) == JSON.stringify(["no results found"])) {
-    return <div>Make a Story!</div>;
+    return <div className="mt-4 mb-4">Add Stuff Here!</div>;
   }
   console.log(stories);
   return (

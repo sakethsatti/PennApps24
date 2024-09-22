@@ -13,7 +13,7 @@ interface UserNotesProps {
 
 const UserNotes: React.FC<UserNotesProps> = ({ notes }) => {
   if (JSON.stringify(notes) == JSON.stringify(["no results found"])) {
-    return <div>Take Some Notes!</div>;
+    return <div className="mt-4 mb-4">Take Some Notes!</div>;
   }
   console.log(notes);
   return (
