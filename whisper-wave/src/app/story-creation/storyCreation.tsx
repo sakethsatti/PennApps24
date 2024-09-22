@@ -21,8 +21,8 @@ const StoryCreation: React.FC = () => {
   useEffect(() => {
     const fetchSounds = async () => {
       const response = await queryDataBase(localStorage.getItem("username"));
-      console.log(response.message);
-      if (response.message == undefined) {
+      console.log(typeof response);
+      if (response === "no results found") {
         setCustomSounds(["Music"]);
         console.log("line 27");
 

@@ -115,7 +115,7 @@ async def storeSoundsFromUsers(soundReq: soundRequst):
     collection.insert_one(
         {"sound": soundReq.sound, "username": soundReq.username, "date": soundReq.date}
     )
-    pass
+    return {"message": "successfully added"}
 
 
 class storyRequest(BaseModel):
@@ -172,14 +172,16 @@ async def querySounds(queryReq: queryRequest):
     retArry = []
     print(queryReq.username)
     for doc in collection.find():
-        print(doc["username"] == queryReq)
         if doc["username"] == queryReq.username:
             print("here")
             print(type(doc["sound"]))
             retArry.append(doc["sound"])
+            print("appending")
+            print(doc)
 
     if len(retArry) == 0:
         return {"message": "no results found"}
+    print("returning everything")
     return {"message": retArry}
 
 
@@ -222,6 +224,13 @@ async def queryStories(queryReq: queryRequest):
 @app.post("/clearSoundCache")
 async def clearSoundCache(queryReq: queryRequest):
     collection = db["userOutputs"]
+    collection.delete_many({"username": queryReq.username})
+    return {"message": "Thing Delete Successfully"}
+
+
+@app.post("/clearStoryCache")
+async def clearSoundCache(queryReq: queryRequest):
+    collection = db["userStories"]
     collection.delete_many({"username": queryReq.username})
     return {"message": "Thing Delete Successfully"}
 

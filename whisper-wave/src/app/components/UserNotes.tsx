@@ -26,7 +26,7 @@ const UserNotes: React.FC<UserNotesProps> = ({ notes }) => {
                 <Card.Title className="text-xl font-bold mb-2 overflow-scroll">
                   {note.title}
                 </Card.Title>
-                <Card.Text className="flex-grow overflow-hidden">
+                <Card.Text className="flex-grow overflow-scroll">
                   <p>Notes:</p>
                   {note.note
                     .split("-")
