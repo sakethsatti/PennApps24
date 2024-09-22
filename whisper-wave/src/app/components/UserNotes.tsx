@@ -13,17 +13,25 @@ interface UserNotesProps {
 
 const UserNotes: React.FC<UserNotesProps> = ({ notes }) => {
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 ml-auto mr-auto">
-      {notes.map((note, index) => (
-        <Card key={index}>
-          <Card.Body>
-            <Card.Title>{note.title}</Card.Title>
-            <Card.Text>
-              <div className="block overflow-auto h-[150px]">{note.note}</div>
-            </Card.Text>
-          </Card.Body>
-        </Card>
-      ))}
+    <div className="w-full max-w-6xl mx-auto px-4">
+      <div className="flex flex-wrap justify-center -mx-2">
+        {notes.map((note, index) => (
+          <div key={index} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
+            <Card className="h-[300px] flex flex-col">
+              <Card.Body className="flex flex-col h-full">
+                <Card.Title className="text-xl font-bold mb-2 truncate">
+                  {note.title}
+                </Card.Title>
+                <Card.Text className="flex-grow overflow-hidden">
+                  <div className="overflow-auto h-[180px] mb-2">
+                    {note.note}
+                  </div>
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
