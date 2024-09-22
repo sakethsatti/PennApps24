@@ -101,6 +101,36 @@ async def registerUser(loginInfo: SignInRequest):
     return {"message": "couldn't find user"}
 
 
+class soundRequst(BaseModel):
+    sound: str
+    username: str
+    date: str
+
+@app.post("/storeSounds")
+async def storeSoundsFromUsers(soundReq: soundRequst):
+    print("nothing")
+    collection = db["userOutputs"]
+    collection.insert_one({"sound": soundReq.sound, "username": soundReq.username, "date": soundReq.date})
+    pass
+
+class queryRequest(BaseModel):
+    username: str
+@app.post("/querySounds")
+async def querySounds(queryReq: queryRequest):
+    collection = db["userOutputs"]
+    retArry = []
+    print(queryReq.username)
+    for doc in collection.find(): 
+        print(doc["username"] == queryReq)
+        if doc["username"] == queryReq.username:
+            print("here")
+            retArry.append(doc["sound"])
+    
+    if len(retArry) == 0:
+        return {"message": "no results found"}
+    
+    return {"message": retArry}
+
 @app.get("/test")
 async def testApi():
     return {"message": "bottle"}
