@@ -1,5 +1,5 @@
 # WhisperWave
-by: Saketh Satti, Pranshu Suyal, and Akshat Tewari
+by: Saketh Satti (saksatti@gmail.com), Pranshu Suyal(suyalpranshu@gmail.com), and Akshat Tewari (akkubear@gmail.com)
 This app was hack for PennApps XXV
 
 ## Inspiration
