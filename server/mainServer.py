@@ -59,8 +59,8 @@ async def signInUser(loginInfo: SignInRequest):
     try:
         for user in collection.find():
             print("iteration")
-            print(f"Password Doc: {user["username"]}")
-            print(f"{user["password"]}")
+            print(f"Password Doc: {user['username']}")
+            print(f"{user['password']}")
             if (
                 user["username"] == loginInfo.username
                 and user["password"] == loginInfo.password
