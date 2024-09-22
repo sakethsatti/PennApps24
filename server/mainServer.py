@@ -99,7 +99,7 @@ async def registerUser(loginInfo: SignInRequest):
     except Exception as e:
         print(e)
         print("line 72")
-    return {"message": "couldn't find user"}
+    return {"message": "user successfully registered"}
 
 
 class soundRequst(BaseModel):
@@ -144,8 +144,7 @@ async def storeNotesFromUsers(noteReq: addToNotes):
     try:
         noteString = ""
         for x in noteReq.notesDocument.splitlines()[1:]:
-            if len(x) > 4:
-                noteString += "\n" + x
+            noteString += "\n" + x
         collection = db["userNotes"]
         collection.insert_one(
             {
@@ -215,6 +214,13 @@ async def queryStories(queryReq: queryRequest):
     if len(retArry) == 0:
         return {"message": "no results found"}
     return {"message": retArry}
+
+
+@app.post("/clearSoundCache")
+async def clearSoundCache(queryReq: queryRequest):
+    collection = db["userOutputs"]
+    collection.delete_many({"username": queryReq.username})
+    return {"message": "Thing Delete Successfully"}
 
 
 @app.get("/test")

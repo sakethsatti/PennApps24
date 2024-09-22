@@ -31,6 +31,7 @@ const RegisterForm = () => {
         localStorage.setItem("username", userName);
         location.reload();
       } else {
+        console.log(data.message);
         alert("Registration failed. Please try again.");
       }
     } catch (error) {
@@ -43,7 +44,11 @@ const RegisterForm = () => {
     <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg">
       <h2 className="text-3xl font-bold text-center mb-6">Sign Up</h2>
       <Form onSubmit={handleSubmit}>
-        <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
+        <FloatingLabel
+          controlId="floatingInput"
+          label="Username"
+          className="mb-3"
+        >
           <Form.Control
             type="text"
             placeholder="Username"
@@ -51,7 +56,11 @@ const RegisterForm = () => {
             required
           />
         </FloatingLabel>
-        <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
+        <FloatingLabel
+          controlId="floatingPassword"
+          label="Password"
+          className="mb-3"
+        >
           <Form.Control
             type="password"
             placeholder="Password"
@@ -59,7 +68,11 @@ const RegisterForm = () => {
             required
           />
         </FloatingLabel>
-        <FloatingLabel controlId="floatingConfirmPassword" label="Confirm Password" className="mb-3">
+        <FloatingLabel
+          controlId="floatingConfirmPassword"
+          label="Confirm Password"
+          className="mb-3"
+        >
           <Form.Control
             type="password"
             placeholder="Confirm Password"

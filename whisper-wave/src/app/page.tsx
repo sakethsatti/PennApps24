@@ -42,6 +42,7 @@ export default function Home() {
     } catch (error) {
       console.error("Error fetching user stories:", error);
     }
+    console.log(userStories);
   };
 
   const handleSignOut = () => {
@@ -69,11 +70,19 @@ export default function Home() {
             <>
               <>
                 <h1>Your Notes</h1>
-                <UserNotes notes={userNotes} />
+                {userNotes.length != 0 ? (
+                  <UserNotes notes={userNotes} />
+                ) : (
+                  <div>Add stuff here!</div>
+                )}
               </>
               <>
                 <h1>Your Stories</h1>
-                <UserStories stories={userStories} />
+                {userStories.length != 0 ? (
+                  <UserStories stories={userStories} />
+                ) : (
+                  <div>Add Stuff here</div>
+                )}
               </>
             </>
           ) : isLoggedIn === false ? (

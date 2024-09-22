@@ -11,6 +11,10 @@ interface UserStoriesProps {
 }
 
 const UserStories: React.FC<UserStoriesProps> = ({ stories }) => {
+  if (JSON.stringify(stories) == JSON.stringify(["no results found"])) {
+    return <div>Make a Story!</div>;
+  }
+  console.log(stories);
   return (
     <div className="flex justify-center items-center p-4">
       <div className="flex flex-wrap justify-center max-w-6xl w-full">

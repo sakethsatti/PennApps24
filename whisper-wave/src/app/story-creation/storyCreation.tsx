@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OpenAI from "openai";
 import "../styles.css";
 import queryDataBase from "../functions/queryUserOutputs";
@@ -12,47 +10,58 @@ const StoryCreation: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [storyType, setStoryType] = useState<StoryType | null>(null);
-  const [customInput, setCustomInput] = useState<string>(""); // New state for extra input
-
-  console.log(process.env.NEXT_PUBLIC_OPENAI_API_KEY);
+  const [customSounds, setCustomSounds] = useState<string[]>([]);
+  const [selectedSounds, setSelectedSounds] = useState<string[]>([]);
 
   const openai = new OpenAI({
     apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     dangerouslyAllowBrowser: true,
   });
 
+  useEffect(() => {
+    const fetchSounds = async () => {
+      const response = await queryDataBase(localStorage.getItem("username"));
+      console.log(response.message);
+      if (response.message == undefined) {
+        setCustomSounds(["Music"]);
+        console.log("line 27");
+
+        return "cannot use this feature";
+      }
+      const uniqueSounds: any = Array.from(new Set(response));
+      setCustomSounds(uniqueSounds);
+    };
+    fetchSounds();
+  }, []);
+
+  const handleSoundClick = (sound: string) => {
+    setSelectedSounds((prev) =>
+      prev.includes(sound) ? prev.filter((s) => s !== sound) : [...prev, sound]
+    );
+  };
+
   const handleStoryRequest = async (type: StoryType) => {
     setIsLoading(true);
     setError(null);
     setStory(null);
     setStoryType(type);
-    let role = "";
-    let recentSound: any = await queryDataBase(
-      localStorage.getItem("username")
-    );
-    recentSound = new Set(recentSound);
-    recentSound = Array.from(recentSound);
-    console.log("array");
-    if (typeof recentSound != "string") {
-      let roles = "";
-      recentSound.forEach((element: any) => {
-        roles += element + " and ";
-        console.log("logging element");
-        console.log(element);
-      });
-      role = `Tell me a ${type} story about a ${roles} using ${roles} sounds.`;
-    }
+
+    const soundsPrompt =
+      selectedSounds.length > 0
+        ? selectedSounds.join(" and ")
+        : customSounds.join(" and ");
+
     try {
       const response = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
           {
             role: "system",
-            content: `You are a storyteller that can only tell ${type} stories about ${recentSound}s.`,
+            content: `You are a storyteller that can only tell ${type} stories about ${soundsPrompt}s.`,
           },
           {
             role: "user",
-            content: `Tell me a ${type} story about a ${recentSound} using ${recentSound} sounds. Here is some extra information: ${customInput}`, // Include extra user input
+            content: `Tell me a ${type} story about a ${soundsPrompt} using ${soundsPrompt} sounds.`,
           },
         ],
         max_tokens: 500,
@@ -61,10 +70,11 @@ const StoryCreation: React.FC = () => {
       const generatedStory =
         response.choices[0]?.message?.content || "No story available.";
       setStory(generatedStory);
+
       const storeAStory = await fetch("http://127.0.0.1:8000/storeStories", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // <-- Include the Content-Type header
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           story: generatedStory,
@@ -103,10 +113,27 @@ const StoryCreation: React.FC = () => {
         Story Time
       </h1>
       <p className="text-lg mb-4 text-black text-center">
-        Click a button below to hear a story about your most recent sound.
+        Click on the sounds below to include them in your story, then choose a
+        story type (all by default, and if you haven't recorded, it's none by
+        default).
       </p>
 
-      {/* New textarea for extra user input */}
+      <div className="mb-4 flex flex-wrap justify-center gap-2">
+        {customSounds.map((sound, index) => (
+          <span
+            key={index}
+            onClick={() => handleSoundClick(sound)}
+            className={`cursor-pointer px-3 py-1 rounded-full ${
+              selectedSounds.includes(sound)
+                ? "bg-black text-white"
+                : "bg-gray-200 text-black"
+            } hover:bg-gray-300 transition-colors duration-300`}
+          >
+            {sound}
+          </span>
+        ))}
+      </div>
+
       <div className="mt-8 flex justify-center gap-4">
         <StoryButton type="funny" label="Funny!" />
         <StoryButton type="sad" label="Sad..." />
