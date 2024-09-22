@@ -1,15 +1,24 @@
 # WhisperWave
 by: Saketh Satti (saksatti@gmail.com), Pranshu Suyal(suyalpranshu@gmail.com), and Akshat Tewari (akkubear@gmail.com)
+
 This app was hack for PennApps XXV
 
+
 Languages: Python, JavaScript
+
 Libraries: React, FastAPI, TensorFlow, OpenAI (Whisper and GPT), PyMongo
+
 Frameworks: NextJS
+
 Database: MongoDB
 
+
 Resources:
+
 Librosa Docs: https://librosa.org/doc/latest/index.html
+
 MongoDB Docs: https://www.mongodb.com/docs/atlas/
+
 OpenAI Docs: https://platform.openai.com/docs/overview
 
 
